@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div id="app">
+<sub-component v-bind:propsdata="message" v-on:show-log="printTxt"></sub-component> <!--v-on:하위cmp메소드명="상위cmp메소드명"-->
+<local-component></local-component>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+  //전역 컴포넌트
+  Vue.component('sub-component',{
+      props: ['propsdata'],//상위 컴포넌트 데이터 받기
+      template:'<button v-on:click="showLog">{{propsdata}}</button>',
+      methods: {
+          showLog: function () {
+            this.$emit('show-log') //이벤트 발생
+          }
+      }
+  });
+  //지역 컴포넌트
+  var local_cmp = {
+      template:'<h5>지역 컴포넌트</h5>'
+  };
+  //인스턴스 생성
+  new Vue({
+      el:'#app',
+      data: {
+          message: '상위 컴포넌트 데이터'
+      },
+      components: {
+        'local-component': local_cmp
+      },
+      methods: {
+          printTxt: function () {
+              console.log('하위 컴포넌트 이벤트 수신')
+          }
+      }
+  });
+</script>
+</body>
+</html>
