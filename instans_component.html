@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <p>{{msg}}</p>
+    <global-cmp :received_data="msg"></global-cmp>
+    <local-cmp :received_data="msg"></local-cmp>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    //지역 컴포넌트 등록
+    var local_cmp = {
+      props: ['received_data'], //상위 컴포넌트에서 받아지는 데이터 바인딩
+      template: '<h5>지역 컴포넌트 {{lmsg}} {{received_data}}</h5>',
+      data: function(){
+        return {
+          lmsg: 'local_cmp의 데이터'
+        }
+      }
+    }
+    //전역 컴포넌트 등록
+    Vue.component('global-cmp', {
+      props: ['received_data'], //상위 컴포넌트에서 받아지는 데이터 바인딩
+      template: '<h3>전역 컴포넌트 {{gmsg}} {{received_data}}</h3>',
+      data: function(){
+        return {
+          gmsg: 'global-cmp의 데이터'
+        }
+      }
+    })
+    //최초 인스턴스 생성 = 최상위 컴포넌트
+    new Vue({
+      el:'#app',
+      data: function(){
+        return {
+          msg: '#app의 데이터'
+        }
+      },
+      components: {
+        'local-cmp': local_cmp
+      }
+    })
+  </script>
+</body>
+</html>

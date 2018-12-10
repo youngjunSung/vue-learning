@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <p>{{msg}}</p>
+    <g-cmp v-on:plus="plus">{{msg}}</g-cmp>
+    <g-cmp v-on:plus="plus">{{msg}}</g-cmp>
+    <l-cmp :mydata="msg"></l-cmp>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    Vue.component('g-cmp', {
+      template: '<button v-on:click="plus">{{msg}}</button>',
+      data: function (){
+        return {
+          msg: 0,
+          txt: 'test'
+        }
+      },
+      methods: {
+        plus: function(){
+          this.msg++
+          this.$emit('plus') // plus 이벤트 발생
+        }
+      }
+    })
+    let num =0;
+    const localCmp = {
+      props:['mydata'],
+      template: '<h5 v-on:click="plus">{{mydata}}</h5>',
+      methods: {
+        plus: function(){
+          num++
+          console.log(num)
+        }
+      }
+    }
+    new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          msg: 0
+        }
+      },
+      methods: {
+        plus: function(){
+          this.msg++
+        }
+      },
+      components: {
+        'l-cmp': localCmp
+      }
+    });
+  </script>
+</body>
+
+</html>

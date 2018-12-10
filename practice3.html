@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <p>{{msg}}</p>
+    <g-cmp :child_data="msg" v-on:receive-method="plus"></g-cmp>
+    <l-cml></l-cml>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    Vue.component('g-cmp', {
+      props: ['child_data'],
+      template: '<h3 v-on:click="receive">global cmp + {{child_data}} + {{g_msg}}</h3>',
+      data: function () {
+        return {
+          g_msg: 777
+        }
+      },
+      methods: {
+        receive: function (){
+          this.$emit('receive-method')
+        }
+      }
+    })
+
+    const localCmp = {
+      template: '<h5>local cmp</h5>'
+    }
+    
+    new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          msg: 0
+        }
+      },
+      components: {
+        'l-cml': localCmp
+      },
+      methods: {
+        plus: function () {
+          this.msg++
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

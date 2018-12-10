@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Routing Example App</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable-pro/dist/handsontable.full.min.css">
+</head>
+
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/handsontable-pro/dist/handsontable.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+  <h3>Favorite color by gender</h3>
+  <p>
+    Where <strong>0</strong> is 'I do not like' and <strong>10</strong> 'I love it'
+  </p>
+  <canvas class="chartJSContainer" width='400' height='150'></canvas>
+  <div id="example1"></div>
+</body>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+
+    var
+      example = document.getElementById('example1'),
+      hot;
+
+    var headers = ["Red", "Blue", "Yellow", "Green", "Purple", "Orange", "Pink", 'Brown'];
+    var myData = [
+      [5, 10, 3, 5, 2, 3, 5, 1],
+      [9, 9, 3, 10, 8, 7, 7, 2],
+      [5, 1, 10, 6, 7, 9, 4, 8]
+    ];
+    var rowheaders = ['Mark', 'Anna', 'Diana']
+
+    hot = new Handsontable(example, {
+      data: myData,
+      rowHeaders: rowheaders,
+      colHeaders: headers,
+      readOnly: true,
+      colWidths: 88,
+      mergeCells: [
+    {row: 1, col: 1, rowspan: 3, colspan: 3},
+    {row: 3, col: 4, rowspan: 2, colspan: 2},
+    {row: 5, col: 6, rowspan: 3, colspan: 3}
+    ],
+      fillHandle: {
+        autoInsertRow: false,
+      }
+    });
+
+
+    var options = {
+      type: 'bar',
+      data: {
+        labels: headers,
+        datasets: [{
+          label: rowheaders[0],
+          data: myData[0],
+          borderWidth: 1,
+          backgroundColor: 'rgb(255, 236, 217)'
+        }, {
+          label: rowheaders[1],
+          data: myData[1],
+          borderWidth: 1,
+          backgroundColor: 'rgb(235, 224, 255)'
+        }, {
+          label: rowheaders[2],
+          data: myData[2],
+          borderWidth: 1,
+          backgroundColor: 'rgb(219, 242, 242)'
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              reverse: false
+            }
+          }]
+        }
+      }
+    }
+
+    var ctx = document.querySelector('.chartJSContainer').getContext('2d');
+    var myChart = new Chart(ctx, options);
+
+  });
+</script>
+
+</html>

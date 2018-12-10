@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <p>{{message}}</p>
+    <global-component :gcmp_msg="message" v-on:recive-method="parent_method"></global-component>
+    <local-component></local-component>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    Vue.component('global-component', {
+      props: ['gcmp_msg'],
+      template: '<h3 v-on:click="child_method">global component + {{message}} + {{gcmp_msg}}</h3>',
+      data: function () {
+        return {
+          message: 'global component msg'
+        }
+      },
+      methods: {
+        child_method: function () {
+          this.$emit('recive-method');
+        }
+      }
+    })
+    const lcmp = {
+      template: '<h5 v-on:click="local_cmp_method">local component {{local_msg}}</h5>',
+      data: function () {
+        return {
+          local_msg: 0
+        }
+      },
+      methods: {
+        local_cmp_method: function () {
+          this.local_msg++
+        }
+      }
+    }
+    let num = 0;
+    //첫 인스턴스 생성 = 최상위 컴포넌트
+    new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          message: 'first instance message'
+        }
+      },
+      components: {
+        'local-component': lcmp
+      },
+      methods: {
+        parent_method: function () {
+          num += 1;
+          console.log('상위 컴포넌트 메소드 ' + num);
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

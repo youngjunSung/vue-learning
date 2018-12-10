@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+
+<body>
+  <div id="app">
+    <p>{{message}}</p>
+    <global-component :my_message="message" v-on:my-method="parentMethod"></global-component>
+    <local-component v-bind="todo"></local-component>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    Vue.component('global-component', {
+      props: ['my_message'],
+      data: function(){
+        return {
+          data_message: 'data-message'
+        }
+      },
+      template: '<h3 v-on:click="childrenMethod">전역 컴포넌트 + {{my_message}} + {{data_message}}</h3>',
+      methods: {
+        childrenMethod: function () { // 컴포넌트 메소드명 정의
+          this.$emit('my-method')
+        }
+      }
+    })
+    var local_cmp = {
+      template: '<h5>지역 컴포넌트{{message}}</h5>',
+      data: function(){
+        return {
+          message: ' 메세지'
+        }
+      },
+      todo: {
+        text: 'Learn Vue',
+        isComplete: false
+      }
+    }
+    new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          message: '최상위 컴포넌트 데이터'
+        }
+      },
+      components: {
+        'local-component': local_cmp
+      },
+      methods: {
+        parentMethod: function () {
+          console.log('상위 컴포넌트 이벤트 수신')
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
