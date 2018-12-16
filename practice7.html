@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <p v-on:click="plus">{{msg}}</p>
+    <g-cmp :received_data="msg" v-on:bottom_method="plus"></g-cmp>
+    <l-cmp :data_of_paraent="msg" v-on:child_method="plus"></l-cmp>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    const eventBus = new Vue();
+
+    Vue.component('g-cmp', {
+      props: ['received_data'], // 템플릿 태그 내부에서 데이터 바인딩
+      template: '<button v-on:click="g_cmp_method">{{received_data}} {{num}}</button>',
+      data: function () {
+        return {
+          num: 5
+        }
+      },
+      methods: {
+        top_method: function(){ // 컴포넌트 내부에서 함수 정의한 것은 템플릿 태그에 바인딩
+          this.$emit('bottom_method') //부모-자식 연결되는 것은 인스턴스 내부 태그에 바인딩
+        },
+        g_cmp_method: function(){
+          eventBus.$emit('linked_event',100)
+        }
+      }
+    });
+
+    const l_cmp = {
+      props: ['data_of_paraent'],
+      template: '<button v-on:click="receive_method">{{data_of_paraent}} {{message}}</button>',
+      data: function () {
+        return {
+          message: 9
+        }
+      },
+      methods: {
+        receive_method: function () {
+          this.$emit('child_method')
+        }
+      }
+    }
+
+    const app = new Vue({
+      el: '#app',
+      created: function() {
+          eventBus.$on('linked_event', function(value){
+            console.log("이벤트를 전달 받음. 전달 받은 값 : ", value);
+          });
+        },
+      data: function () {
+        return {
+          msg: 0
+        }
+      },
+      methods: {
+        plus: function () {
+          this.msg++
+        }
+      },
+      components: {
+        'l-cmp': l_cmp
+      }
+    });
+  </script>
+</body>
+
+</html>
