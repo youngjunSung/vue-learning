@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
 
 <head>
   <meta charset="UTF-8">
@@ -9,70 +9,74 @@
 </head>
 
 <body>
-  <div id="app">
-    <p v-on:click="plus">{{msg}}</p>
-    <g-cmp :received_data="msg" v-on:bottom_method="plus"></g-cmp>
-    <l-cmp :data_of_paraent="msg" v-on:child_method="plus"></l-cmp>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-  <script>
-    const eventBus = new Vue();
-
-    Vue.component('g-cmp', {
-      props: ['received_data'], // 템플릿 태그 내부에서 데이터 바인딩
-      template: '<button v-on:click="g_cmp_method">{{received_data}} {{num}}</button>',
-      data: function () {
-        return {
-          num: 5
-        }
-      },
-      methods: {
-        top_method: function(){ // 컴포넌트 내부에서 함수 정의한 것은 템플릿 태그에 바인딩
-          this.$emit('bottom_method') //부모-자식 연결되는 것은 인스턴스 내부 태그에 바인딩
+<div id="app">
+  <h1 v-on:click="plus_num">Root Component {{msg}}</h1>
+  <gcmp></gcmp>
+  <!--이벤트명="메소드명",
+  발생한 show-event 이벤트는 해당 컴포넌트 태그에 전달되고 그 대상인 상위 컴포넌트의 receiveEvent 메소드가 실행된다-->
+  <lcmp v-bind:props-name="msg" v-on:show-event="receiveEvent"></lcmp>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    var eventBus = new Vue();
+    var lcmp = {
+        props: ['props_name'], //↓클릭 시 showEvent 메소드 실행되면서 show-event 이벤트 발생
+        template: '<h3 v-on:click="deliveryData">Local Component {{msg3}} {{props_name}}</h3>',
+        data: function () {
+            return {
+                msg3: 0
+            }
         },
-        g_cmp_method: function(){
-          eventBus.$emit('linked_event',100)
+        methods: {
+            plus_num: function () {
+                this.msg3++
+            },
+            showEvent: function () { // 메소드명 정의 후
+                this.$emit('show-event') // 이벤트명 발생
+            },
+            deliveryData: function () {
+                eventBus.$emit('bus-data',100)
+            }
         }
-      }
-    });
-
-    const l_cmp = {
-      props: ['data_of_paraent'],
-      template: '<button v-on:click="receive_method">{{data_of_paraent}} {{message}}</button>',
-      data: function () {
-        return {
-          message: 9
-        }
-      },
-      methods: {
-        receive_method: function () {
-          this.$emit('child_method')
-        }
-      }
-    }
-
-    const app = new Vue({
-      el: '#app',
-      created: function() {
-          eventBus.$on('linked_event', function(value){
-            console.log("이벤트를 전달 받음. 전달 받은 값 : ", value);
-          });
+    };
+    Vue.component('gcmp', {
+        template: '<h2 v-on:click="plus_num">Global Component {{msg2}}</h2>',
+        data: function () {
+            return {
+                msg2: 10
+            }
         },
-      data: function () {
-        return {
-          msg: 0
+        methods: {
+            plus_num: function () {
+                this.msg2++
+            }
+        },
+        created: function () {
+            eventBus.$on('bus-data', function (x) {
+                alert('전달받은 인자' + x);
+            });
         }
-      },
-      methods: {
-        plus: function () {
-          this.msg++
-        }
-      },
-      components: {
-        'l-cmp': l_cmp
-      }
     });
-  </script>
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                msg: 100
+            }
+        },
+        methods: {
+            plus_num: function () {
+                this.msg++;
+            },
+            receiveEvent: function () {
+                alert()
+            }
+        },
+        components: {
+            'lcmp': lcmp
+        }
+    })
+</script>
 </body>
 
 </html>
