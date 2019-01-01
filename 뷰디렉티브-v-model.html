@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+<div id="app">
+  <input v-model="inputtext"><button @click="addTxt">dd</button>
+  <p>{{inputtext}}</p>
+  <input type="radio" v-model="radiochk" value="사과">
+  <input type="radio" v-model="radiochk" value="포도">
+  <input type="radio" v-model="radiochk" value="메론">
+  <p>{{radiochk}}</p>
+  <h3><input type="checkbox" v-model="smile" @click="chkValue" checked/>체크박스에 v-model</h3>
+  <img :src="smile ? feelsgood : feelsbad"/>
+  <!-- 삼항연산자로 모바일 메뉴 구현 가능할듯 -->
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+  new Vue({
+      data(){
+          return{
+              inputvalue: 'nametxt',
+              inputtext: 'hellow',
+              radiochk: true,
+              smile: '',
+              feelsgood: './image/brand_icon1.jpg',
+              feelsbad: './image/brand_icon2.jpg',
+          }
+      },
+      watch: {
+          inputtext(data){
+              console.log(data)
+          }
+      },
+      methods: {
+          addTxt(){
+              console.log(this.inputtext)
+          },
+          chkValue(){
+              console.log(this.smile)
+          }
+      }
+  }).$mount('#app')
+</script>
+</body>
+
+</html>

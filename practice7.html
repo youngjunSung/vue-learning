@@ -14,14 +14,15 @@
   <gcmp></gcmp>
   <!--이벤트명="메소드명",
   발생한 show-event 이벤트는 해당 컴포넌트 태그에 전달되고 그 대상인 상위 컴포넌트의 receiveEvent 메소드가 실행된다-->
-  <lcmp v-bind:props-name="msg" v-on:show-event="receiveEvent"></lcmp>
+  <lcmp v-bind:props_name="msg" v-on:show-event="receiveEvent"></lcmp>
+  <!-- v-bind:는 HTML 속성(id, class, data-name 등) 값에 뷰 데이터 값을 연결할 때 사용하는 데이터 연결 방식 -->
 </div>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script>
     var eventBus = new Vue();
     var lcmp = {
         props: ['props_name'], //↓클릭 시 showEvent 메소드 실행되면서 show-event 이벤트 발생
-        template: '<h3 v-on:click="deliveryData">Local Component {{msg3}} {{props_name}}</h3>',
+        template: '<h3 v-on:click="showEvent">Local Component {{msg3}} {{props_name}}</h3>',
         data: function () {
             return {
                 msg3: 0
@@ -35,7 +36,7 @@
                 this.$emit('show-event') // 이벤트명 발생
             },
             deliveryData: function () {
-                eventBus.$emit('bus-data',100)
+                eventBus.$emit('bus-data',100) // eventBus 를 $emit(보낸다)
             }
         }
     };
@@ -52,8 +53,10 @@
             }
         },
         created: function () {
-            eventBus.$on('bus-data', function (x) {
-                alert('전달받은 인자' + x);
+            eventBus.$on('bus-data', function (x) { // eventBus 를 $on(받는다)
+                // alert('전달받은 인자' + x);
+                // this.msg2 = x;
+                console.log('전달받은 인자' + x);
             });
         }
     });
@@ -69,7 +72,7 @@
                 this.msg++;
             },
             receiveEvent: function () {
-                alert()
+                console.log('하위 컴포넌트로 이벤트 전달');
             }
         },
         components: {

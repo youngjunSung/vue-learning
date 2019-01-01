@@ -1,12 +1,13 @@
 <html>
   <head>
+    <meta charset="UTF-8">
     <title>Vue Template - Javascript Expression</title>
   </head>
   <body>
     <div id="app">
       <!-- 1. -->
-      {{ var a = 10; }} <!-- X, 선언문은 사용 불가능 -->
-      {{ if (true) {return 100} }} <!-- X, 분기 구문은 사용 불가능 -->
+      <!--{{ var a = 10; }} &lt;!&ndash; X, 선언문은 사용 불가능 &ndash;&gt;-->
+      <!--{{ if (true) {return 100} }} &lt;!&ndash; X, 분기 구문은 사용 불가능 &ndash;&gt;-->
       {{ true ? 100 : 0 }} <!-- O, 삼항 연산자로 표현 가능 -->
 
       <!-- 2. -->

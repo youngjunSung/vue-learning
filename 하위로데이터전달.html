@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+<div id="app">
+  <h1>상위 컴포넌트</h1>
+  <p>{{msg}}</p>
+  <lcmp v-bind:propsdata="msg"></lcmp>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+  var localComponent = {
+      props: ['propsdata'],
+      template: '<div><h3>하위 컴포넌트</h3><p>{{propsdata}}</p></div>'
+  };
+  new Vue({
+      data(){
+          return{
+              msg: 'parent data'
+          }
+      },
+      components: {
+          'lcmp': localComponent
+      }
+  }).$mount('#app')
+</script>
+</body>
+
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+<div id="app">
+  {{msg}}
+  <p>
+    <router-link to="/main">메인</router-link>
+    <router-link to="/mypage">마이페이지</router-link>
+    <router-link to="/cs">고객센터</router-link>
+    <router-link to="/sub">서브</router-link>
+  </p>
+  <hr>
+  <router-view></router-view>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router@3.0.1/dist/vue-router.js"></script>
+<script>
+    var main = {
+        template: `
+      <div>
+      <h1>Main 영역</h1>
+      <router-view></router-view>
+      <router-link to="main/sub2">서브</router-link>
+      </div>
+      `
+    };
+    var mypage = {template: '<h3>My page 영역</h3>'};
+    var cs = {template: '<h3>고객센터 영역</h3>'};
+    var sub = {template: '<h5>서브페이지 영역</h5>'};
+    var sub2 = {template: '<h5>서브페이지2222 영역</h5>'};
+
+    var router = new VueRouter({
+        routes: [
+            {
+                path: '/main',
+                components: {
+                    default: main
+                },
+                children: [
+                    {
+                        path: '',
+                        component: sub
+                    },
+                    {
+                        path: 'sub2',
+                        component: sub2
+                    }
+                ]
+            },
+            {
+                path: '/mypage',
+                components: {
+                    default: mypage
+                }
+            },
+            {
+                path: '/cs',
+                component: cs
+            }
+        ]
+    });
+    new Vue({
+        router,
+        data: function () {
+            return {
+                msg: '최상위 인스턴스 데이터'
+            }
+        }
+    }).$mount('#app')
+</script>
+</body>
+
+</html>
